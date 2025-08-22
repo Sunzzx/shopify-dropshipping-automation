@@ -3,11 +3,9 @@ name: CI
 on:
   push:
     branches:
-      - main
       - clean-main
   pull_request:
     branches:
-      - main
       - clean-main
 
 permissions:
