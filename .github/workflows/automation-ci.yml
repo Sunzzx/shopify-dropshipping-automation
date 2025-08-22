@@ -75,7 +75,7 @@ jobs:
       - name: Test demo mode
         run: |
           cd automation
-          npm run demo:hoodies
+          npm run demo
         env:
           NODE_ENV: test
 
