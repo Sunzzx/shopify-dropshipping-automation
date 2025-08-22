@@ -1,0 +1,18 @@
+{
+  "npm.bin": "/opt/homebrew/bin/npm",
+  "terminal.integrated.env.osx": {
+    "PATH": "/opt/homebrew/bin:${env:PATH}"
+  },
+  "shopify.theme.nodeExecutable": "/opt/homebrew/bin/node",
+  "shopify.theme.npmExecutable": "/opt/homebrew/bin/npm",
+  "[liquid]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "sissel.shopify-liquid"
+  },
+  "files.associations": {
+    "*.liquid": "liquid"
+  },
+  "emmet.includeLanguages": {
+    "liquid": "html"
+  }
+}

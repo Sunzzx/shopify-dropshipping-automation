@@ -1,0 +1,30 @@
+{
+  "name": "shopify-automation-theme",
+  "version": "1.0.0",
+  "description": "Shopify CJ Dropshipping Automation Suite with AI Management",
+  "main": "index.js",
+  "scripts": {
+    "dev": "shopify theme dev",
+    "build": "shopify theme build",
+    "deploy": "shopify theme push",
+    "check": "shopify theme check",
+    "lint": "theme-check .",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "shopify",
+    "theme",
+    "dropshipping",
+    "automation",
+    "cj-dropshipping"
+  ],
+  "author": "Shopify Automation Suite",
+  "license": "MIT",
+  "devDependencies": {
+    "@shopify/theme-check": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}
