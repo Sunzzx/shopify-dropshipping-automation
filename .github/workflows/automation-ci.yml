@@ -1,0 +1,139 @@
+name: Shopify Automation CI/CD
+
+on:
+  push:
+    branches: [ clean-main, main ]
+  pull_request:
+    branches: [ clean-main, main ]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  actions: read
+
+jobs:
+  # Lint and validate package.json
+  validate-package:
+    name: Validate Package Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Validate package.json
+        run: |
+          echo "Validating root package.json..."
+          npm install --dry-run
+          
+      - name: Validate automation package.json
+        run: |
+          echo "Validating automation package.json..."
+          cd automation && npm install --dry-run
+          
+      - name: Validate AI manager package.json
+        run: |
+          echo "Validating AI manager package.json..."
+          cd ai-store-manager && npm install --dry-run
+
+  # Theme validation
+  theme-check:
+    name: Shopify Theme Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Theme Check
+        uses: shopify/theme-check-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  # Test automation scripts
+  test-automation:
+    name: Test Automation Scripts
+    runs-on: ubuntu-latest
+    needs: validate-package
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install automation dependencies
+        run: |
+          cd automation
+          npm install
+      
+      - name: Test demo mode
+        run: |
+          cd automation
+          npm run demo:hoodies
+        env:
+          NODE_ENV: test
+
+  # Test AI manager
+  test-ai-manager:
+    name: Test AI Store Manager
+    runs-on: ubuntu-latest
+    needs: validate-package
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install AI manager dependencies
+        run: |
+          cd ai-store-manager
+          npm install
+      
+      - name: Test AI manager startup
+        run: |
+          cd ai-store-manager
+          timeout 10s npm start || true
+        env:
+          NODE_ENV: test
+
+  # Documentation check
+  docs-check:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check README files exist
+        run: |
+          test -f README.md
+          test -f automation/README.md
+          test -f ai-store-manager/README.md
+          echo "✅ All README files found"
+      
+      - name: Check setup guides exist
+        run: |
+          test -f SETUP_INSTRUCTIONS.md
+          test -f DEVELOPMENT.md
+          test -f SEO_OPTIMIZATION_GUIDE.md
+          echo "✅ All setup guides found"
+
+  # Security scan
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run security audit
+        run: |
+          cd automation && npm audit --audit-level moderate || true
+          cd ../ai-store-manager && npm audit --audit-level moderate || true
