@@ -20,6 +20,9 @@
   ],
   "author": "Shopify Automation Suite",
   "license": "MIT",
+  "devDependencies": {
+    "@shopify/cli": "^3.84.0"
+  },
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
