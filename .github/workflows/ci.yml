@@ -1,5 +1,6 @@
 name: CI
 
+# Trigger on push and pull requests to clean-main branch
 on:
   push:
     branches:
@@ -19,6 +20,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Verify lock file exists
+        run: |
+          echo "Checking for lock files..."
+          ls -la package*.json || true
+          pwd
+          
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
